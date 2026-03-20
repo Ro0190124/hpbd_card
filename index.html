@@ -412,6 +412,8 @@
       background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.15), transparent);
       transform: rotate(45deg);
       animation: btnShine 3s ease-in-out infinite;
+      /* [FIX] Không để pseudo-element chặn click */
+      pointer-events: none;
     }
 
     @keyframes btnShine {
@@ -1023,13 +1025,13 @@
         <!-- Mặt sau -->
         <div class="card-face card-back">
           <div class="inside-decoration">🎉🎊🎈</div>
-          <!-- [CHANGED] Tên cố định hiển thị trực tiếp -->
           <h3 id="cardBackTitle">Dành tặng Minh</h3>
           <p>Đây là một món quà nhỏ<br>dành riêng cho ngày đặc biệt của bạn...</p>
-          <button class="btn-continue" id="btnToStep3">Tiếp tục →</button>
         </div>
       </div>
     </div>
+    <!-- [FIX] Nút đặt NGOÀI card-scene, không bị 3D transform ảnh hưởng -->
+    <button class="btn-continue" id="btnToStep3" style="display:none;">Tiếp tục →</button>
   </div>
 
   <!-- ======= STEP 3: HAPPY BIRTHDAY TYPING ======= -->
@@ -1313,6 +1315,10 @@
       if (state.cardFlipped) return;
       state.cardFlipped = true;
       card3d.classList.add('flipped');
+      // [FIX] Hiện nút "Tiếp tục" sau khi card lật xong (1.2s animation)
+      setTimeout(() => {
+        btnToStep3.style.display = '';
+      }, 1300);
     }
 
     // ========== STEP 3 LOGIC ==========
