@@ -1315,10 +1315,10 @@
       if (state.cardFlipped) return;
       state.cardFlipped = true;
       card3d.classList.add('flipped');
-      // [FIX] Hiện nút "Tiếp tục" sau khi card lật xong (1.2s animation)
+      // [FIX] Hiện nút nhanh hơn — 400ms sau khi bắt đầu lật (mặt sau đã lộ ra)
       setTimeout(() => {
         btnToStep3.style.display = '';
-      }, 1300);
+      }, 400);
     }
 
     // ========== STEP 3 LOGIC ==========
