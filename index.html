@@ -347,9 +347,10 @@
       background: linear-gradient(160deg, #1a0030, #2d1b69);
       transform: rotateY(180deg);
       box-shadow: 0 25px 80px rgba(196, 77, 255, 0.3);
-      /* [CHANGED] Padding phù hợp mobile */
       padding: 30px 24px;
       text-align: center;
+      /* [FIX] transform-style: flat để con cái (button) dùng 2D hit-test chuẩn, không bị 3D transform nuốt click */
+      transform-style: flat;
     }
 
     .card-back .inside-decoration {
@@ -377,22 +378,28 @@
     }
 
     .btn-continue {
+      /* [FIX] position + z-index đảm bảo button luôn nhận click trong 3D context */
+      position: relative;
+      z-index: 10;
       margin-top: 24px;
       padding: 14px 40px;
       border: none;
       border-radius: 50px;
       background: linear-gradient(135deg, var(--primary), var(--secondary));
       color: #fff;
-      /* [CHANGED] Font button */
       font-family: var(--font-body);
       font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      /* [CHANGED] Transition nhanh hơn cho cảm giác bấm mượt */
+      transition: transform 0.15s ease, box-shadow 0.2s ease, background 0.2s ease;
       box-shadow: 0 8px 30px rgba(255, 107, 157, 0.4);
       position: relative;
       overflow: hidden;
       letter-spacing: 0.3px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
     }
 
     .btn-continue::before {
@@ -418,12 +425,14 @@
     }
 
     .btn-continue:hover {
-      transform: translateY(-3px) scale(1.05);
+      transform: translateY(-2px) scale(1.04);
       box-shadow: 0 12px 40px rgba(255, 107, 157, 0.6);
     }
 
     .btn-continue:active {
-      transform: translateY(0) scale(0.98);
+      transform: translateY(1px) scale(0.96);
+      box-shadow: 0 4px 16px rgba(255, 107, 157, 0.3);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
     }
 
     /* ===== STEP 3: HAPPY BIRTHDAY TYPING ===== */
@@ -1533,10 +1542,13 @@
       }
     });
 
-    // Step 2: Continue button
+    // Step 2: Continue button — delay nhẹ để thấy hiệu ứng bấm trước khi chuyển
     btnToStep3.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (state.currentStep === 2) goToStep(3);
+      e.preventDefault();
+      if (state.currentStep !== 2) return;
+      btnToStep3.style.pointerEvents = 'none'; // chống bấm 2 lần
+      setTimeout(() => goToStep(3), 180);
     });
 
     // Step 3: Click to go to step 4
