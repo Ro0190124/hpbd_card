@@ -1282,22 +1282,22 @@
 
     // ========== STEP 1 LOGIC ==========
     function onStep1() {
-      // Auto-advance after 8 seconds if user doesn't click
+      // Auto-advance after 15 seconds if user doesn't click
       state.autoTimer = setTimeout(() => {
         if (state.currentStep === 1) goToStep(2);
-      }, 8000);
+      }, 15000);
     }
 
     // ========== STEP 2 LOGIC ==========
     function onStep2() {
       state.cardFlipped = false;
       card3d.classList.remove('flipped');
-      // Auto flip after 4 seconds
+      // Auto flip after 8 seconds
       state.autoTimer = setTimeout(() => {
         if (state.currentStep === 2 && !state.cardFlipped) {
           flipCard();
         }
-      }, 4000);
+      }, 8000);
     }
 
     function flipCard() {
@@ -1334,7 +1334,7 @@
       // Auto advance
       state.autoTimer = setTimeout(() => {
         if (state.currentStep === 3) goToStep(4);
-      }, 10000);
+      }, 18000);
     }
 
     // ========== STEP 4 LOGIC ==========
@@ -1347,7 +1347,7 @@
       let autoWish = setInterval(() => {
         if (state.currentStep !== 4) { clearInterval(autoWish); return; }
         nextWish();
-      }, 5000);
+      }, 10000);
     }
 
     function buildWishCards() {
@@ -1383,11 +1383,11 @@
         setTimeout(() => prev.classList.remove(exitClass), 700);
       }
       state.wishIndex = index;
-      // Show new
+      // Show new — đợi card cũ exit xong (600ms) rồi mới hiện card mới, tránh đè nhau
       setTimeout(() => {
         const card = $(`wish-${index}`);
         if (card) card.classList.add('active');
-      }, 200);
+      }, 600);
       // Update dots
       document.querySelectorAll('.wish-dot').forEach((d, i) => {
         d.classList.toggle('active', i === index);
